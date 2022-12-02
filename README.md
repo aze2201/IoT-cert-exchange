@@ -12,3 +12,4 @@ Demo of Resigter Edge IoT device to Cloud Message broker and bind to user identi
 - MQTT: Eclipse Mosquitto
 - Docker: docker and docker-compose plugin
 
+![Topology](https://github.com/aze2201/IoT-cert-exchange/blob/main/topology.jpg)
