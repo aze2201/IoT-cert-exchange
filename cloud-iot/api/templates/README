@@ -1,0 +1,13 @@
+1. Generate certs on device via RSA
+	`openssl genrsa -out key.pe`
+	`openssl rsa -in key.pem -out key.pub -pubout`
+2. Register user in http(s)://HOST/register.html
+	Add device Public Key `key.pub` on register page via base64 format
+	`cat key.pub| base64`
+3. Loggin by username/password
+	### user is connected to topic which is name is hash of password
+	### user will get 5 Cookies (username,topic name, ownPrivateKey and public Key and device public key.
+4. When message arrive to mosquitto we have to use device privte key to decrypt after 2 time base64 decoding.
+	`echo "$message"| base64 -d | base64 -d |  openssl pkeyutl -decrypt -inkey key.pem`
+5. When device publish message to same topic need to be encrypted with user public key.
+	`echo "$message"| openssl pkeyutl -encrypt -pubin -inkey $user.pub| base64`

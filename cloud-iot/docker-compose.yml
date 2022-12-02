@@ -1,0 +1,56 @@
+version: '3'
+services:
+  api:
+    build: 
+      dockerfile: ./api/Dockerfile
+      context: .
+    container_name: cloud-api
+    image: cloud-api
+    ports:
+     - 8081:8081
+    volumes:
+      - './pki:/root/pki'
+      - './api:/root/app'
+   
+  mqtt:
+    container_name: mqtt
+    image: eclipse-mosquitto:2.0.0
+    hostname: mqtt
+    ports:
+      - '1883:1883'
+      - '8883:8883'
+      - '9001:9001'
+    volumes:
+      - './mqtt/mosquitto:/mosquitto'
+      - './mqtt/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf'
+      - './pki:/mosquitto/certs'
+  
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - './nginx/conf.d:/etc/nginx/conf.d'
+      - './nginx/letsencrypt:/etc/letsencrypt'
+      
+  keycloak:
+    image: jboss/keycloak:latest
+    container_name: keycloak
+    environment:
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin
+      - KEYCLOAK_PROXY_ADDRESS_FORWARDING=true
+      - PROXY_ADDRESS_FORWARDING=true
+    ports:
+     - 8080:8080
+     - 9990:9990
+     
+    volumes:
+     - keycloak:/opt/jboss
+     - ../scripts/disable-theme-cache.cli:/opt/jboss/startup-scripts/disable-theme-cache.cli
+     
+volumes:
+  keycloak:
+    external: true

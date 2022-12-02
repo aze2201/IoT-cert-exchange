@@ -1,0 +1,41 @@
+<html>
+<head>
+<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+</head>
+<body>
+
+<H1>welcome  {{ user }}</H1>
+<H3>Here is your signed cert..<br>Do you want to remove it? then click button </H3>
+
+<textarea disabled rows="30" id="caarea" cols="65" >
+{{ cert }}</textarea>
+
+<br><br>
+
+<textarea rows="6" cols="75" id="token">
+{{ access_token }}</textarea>
+
+<br>
+<input type="button" id="revoke_cert"  value="revoke my certificate"/>
+   <script>
+     
+     $("#revoke_cert").click(function()
+     {
+        var cert = $('textarea#caarea').val();
+		var u_token = $('textarea#token').val(); 
+		var token_cert = {'access_token': u_token, 'cert': cert } ;
+        $.ajax(
+        {
+           type: "POST",
+           url: '/api/cloud/revoke-crt',
+           data: token_cert,
+           crossDomain: true,
+           success: function(result)
+           {
+             alert(result);
+           }
+        });
+     });	
+	</script>
+</body>
+</head>

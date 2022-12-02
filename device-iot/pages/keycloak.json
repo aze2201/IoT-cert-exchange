@@ -1,0 +1,8 @@
+{
+  "realm": "i2g-iam",
+  "auth-server-url": "https://iam-poc.ems-web.inno2grid.net/auth/",
+  "ssl-required": "external",
+  "resource": "test-html",
+  "public-client": true,
+  "confidential-port": 0
+}

@@ -1,0 +1,17 @@
+{
+  "web": {
+    "client_id": "ems-bff",
+    "client_secret":"VRdpYsI8mp0IJuhhgXJTCwvT3rozACJE",
+    "auth_uri": "https://iam-poc.ems-web.inno2grid.net/auth/realms/i2g-iam/protocol/openid-connect/auth",
+    "token_uri": "https://iam-poc.ems-web.inno2grid.net/auth/realms/i2g-iam/protocol/openid-connect/token",
+    "token_introspection_uri": "https://iam-poc.ems-web.inno2grid.net/auth/realms/i2g-iam/protocol/openid-connect/token/introspect",
+    "issuer": "https://iam-poc.ems-web.inno2grid.net/auth/realms/i2g-iam",
+    "userinfo_uri": "https://iam-poc.ems-web.inno2grid.net/auth/realms/i2g-iam/protocol/openid-connect/userinfo",
+    "redirect_uris": [
+      "https://bff-poc.ems-web.inno2grid.net/*"
+    ]
+  }
+}
+
+
+

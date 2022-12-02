@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Device connection</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+	
+	<script src="{{url_for('static', filename='mqttws31.js')}}"></script>
+	<script src="{{url_for('static', filename='config.js')}}"></script>
+	
+    <script type="text/javascript">
+
+
+	var host = 'bff-poc.ems-web.inno2grid.net' ;
+	var port = 443 ;
+	var path = '/ws' ;
+
+
+    var mqtt;
+    var reconnectTimeout = 2000;
+	
+	topic='{{ topic }}'  ;
+	
+    function MQTTconnect() {
+	if (typeof path == "undefined") {
+		path = '/mqtt';
+	}
+	mqtt = new Paho.MQTT.Client(
+			host,
+			port,
+			path,
+			"web_" + parseInt(Math.random() * 100, 10)
+	);
+        var options = {
+            timeout: 3,
+            useSSL: useTLS,
+            cleanSession: cleansession,
+            onSuccess: onConnect,
+            onFailure: function (message) {
+                $('#status').val("Connection failed: " + message.errorMessage + "Retrying");
+                setTimeout(MQTTconnect, reconnectTimeout);
+            }
+        };
+
+        mqtt.onConnectionLost = onConnectionLost;
+        mqtt.onMessageArrived = onMessageArrived;
+
+        if (username != null) {
+            options.userName = username;
+            options.password = password;
+        }
+        console.log("Host="+ host + ", port=" + port + ", path=" + path + " TLS = " + useTLS + " username=" + username + " password=" + password);
+        mqtt.connect(options);
+    }
+
+    function onConnect() {
+        $('#status').val('Connected to ' + host + ':' + port + path);
+        // Connection succeeded; subscribe to our topic
+        mqtt.subscribe(topic, {qos: 0});
+        $('#topic').val(topic);
+    }
+
+    function onConnectionLost(response) {
+        setTimeout(MQTTconnect, reconnectTimeout);
+        $('#status').val("connection lost: " + responseObject.errorMessage + ". Reconnecting");
+
+    };
+
+    function onMessageArrived(message) {
+
+        var topic = message.destinationName;
+        var payload = message.payloadString;
+
+        $('#ws').prepend('<li>' + topic + ' = ' + payload + '</li><br>'+payload);
+		console.log(payload);
+    };
+
+function getValue(){
+    var msg_f=document.getElementById("textId").value;
+    console.log(msg_f);
+    var message = new Paho.MQTT.Message(msg_f);
+    message.destinationName = topic;
+    message.qos = 0;
+    mqtt.send(message);
+} ;
+
+
+    $(document).ready(function() {
+        MQTTconnect();
+    });
+
+    </script>
+  </head>
+  <body>
+	<h2>configs<h2>
+	 <a href="https://bff-poc.ems-web.inno2grid.net/revoke/">revoke cert</a>
+	 <a href="https://bff-poc.ems-web.inno2grid.net/">cert config</a>
+    <h1>Device Connection</h1>
+    <div>
+        <div>Subscribed to <input type='text' id='topic' disabled />
+        Status: <input type='text' id='status' size="80" disabled /></div>
+
+        <ul id='ws' style="font-family: 'Courier New', Courier, monospace;"></ul>
+    </div>
+
+
+
+<body>
+<form  method="post" >
+<input type = "textarea" id="textId" name = "link" placeholder="Submit a message"       style="color:black;max-width:133px;"></input>
+<input type = "hidden" name = "ref" value="yes"></input>
+<a href="#" onclick="getValue();">Send to device</a> 
+</form>
+
+  </body>
+</html>

@@ -1,0 +1,42 @@
+version: '3'
+services:
+  api:
+    build: 
+      dockerfile: ./api/Dockerfile
+      context: .
+    image: device-api
+    container_name: device-api
+    ports:
+      - '8081:8081'
+    volumes:
+      - 'certificate:/etc/ems/certs'
+      - 'nginx_config:/etc/ems/nginx_config'
+      - 'mqtt_config:/etc/ems/mqtt_config'
+  nginx:
+    container_name: nginx
+    image: nginx
+    ports:
+      - '80:80'
+      - '81:81'
+      - '443:443'
+    volumes:
+      - './pages:/usr/share/nginx/html'
+      - 'certificate:/etc/ems/certs'
+      - 'nginx_config:/etc/nginx/conf.d'
+  mqtt-device:
+    container_name: mqtt
+    image: eclipse-mosquitto:2.0.0
+    hostname: fariz-i2g1
+    ports:
+      - '1883:1883'
+    volumes:
+      - 'certificate:/etc/ems/certs'
+      - 'mqtt_config:/mosquitto/config'
+      
+volumes:
+  certificate:
+    external: true
+  mqtt_config:
+    external: true
+  nginx_config:
+    external: true
