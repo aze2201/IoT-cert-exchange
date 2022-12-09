@@ -95,7 +95,7 @@ def no_token_api():
     sql_command='insert or ignore into users (username) values (\''+u+'\');'
     cursor.execute(sql_command)
     conn.commit()
-    return redirect('http://device.ems.local:81')
+    return redirect('http://device.mqtt.local:81')
 
 
 @app.route('/api/cloud/device-mqtt-topic', methods=['OPTIONS', 'POST'])
