@@ -2,13 +2,13 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
-		<script src="https://iam-poc.ems-web.inno2grid.net/auth/js/keycloak.js"></script>
+		<script src="https://iam-for-mqtt.domain.com/auth/js/keycloak.js"></script>
 		
     </head>
     <body onload="initKeycloak()">
 	
 	<H1>EMS WEB</H1>
-	<h3>Please keep your device close to Consolinno device. Page will connect to local domain from device</h3>
+	<h3>Please keep your device close to local IoT device. Page will connect to local domain from device</h3>
 	<H4>Steps</H4>
 		<li>Send command to device to generate key and csr (cert request) for sign via CA</li>
 		<li>Device will generate CSR and print</li>
@@ -77,7 +77,7 @@
 			<input type="button" id="bind" onclick="validate()" value="generate CSR on device"/>
 			<script>
 				$('#bind').click(function(){
-				var url = "http://device.ems.local:81/api/device/csr";
+				var url = "http://device.mqtt.local/api/device/csr";
                 $.get(url, function (data) {
                     console.log(data),
                     // *alert(data);
@@ -100,7 +100,7 @@
 					$.ajax(
 					{
 						type: "POST",
-						url: 'https://bff-poc.ems-web.inno2grid.net/api/cloud/sign-csr',
+						url: 'https://cloud.web-for-mqtt.domain.com/api/cloud/sign-csr',
 						data: token_cert,
 						crossDomain: true,
 						contentType: "application/x-www-form-urlencoded",
@@ -128,7 +128,7 @@
 					$.ajax(
 					{
 						type: "POST",
-						url: 'https://bff-poc.ems-web.inno2grid.net/api/cloud/ca',
+						url: 'https://cloud.web-for-mqtt.domain.com/api/cloud/ca',
 						data: textboxvalue,
 						crossDomain: true,
 						success: function(result)
@@ -146,7 +146,7 @@
 			<input type="button" id="get_hash" onclick="validate()" value="get topic name"/>
 			<script>
 				$('#get_hash').click(function(){
-				var url = "http://device.ems.local:81/api/device/get-hash";
+				var url = "http://device.mqtt.local/api/device/get-hash";
                 $.get(url, function (data) {
                     console.log(data)
 					$("#topic_hash").text(data); 
@@ -162,7 +162,7 @@
 				$.ajax(
 				{
 					type: "POST",
-					url: 'http://device.ems.local:81/api/device/upload/ca',
+					url: 'http://device.mqtt.local/api/device/upload/ca',
 					data: textboxvalue,
 					crossDomain: true,
 					success: function(result)
@@ -185,7 +185,7 @@
 				$.ajax(
 				{
 					type: "POST",
-					url: 'http://device.ems.local:81/api/device/upload/cert',
+					url: 'http://device.mqtt.local/api/device/upload/cert',
 					data: textboxvalue,
 					crossDomain: true,
 					success: function(result)
@@ -207,7 +207,7 @@
 					$.ajax(
 					{
 						type: "POST",
-						url: 'https://bff-poc.ems-web.inno2grid.net/api/cloud/device-mqtt-topic',
+						url: 'https://cloud.web-for-mqtt.domain.com/api/cloud/device-mqtt-topic',
 						data: textboxvalue,
 						crossDomain: true,
 						success: function(result)
