@@ -51,7 +51,7 @@ log_dest stdout
 allow_anonymous true
 connection_messages true
 connection m1m0
-address iam-poc.ems-web.inno2grid.net:8883
+address cloud.mqtt.medium.com:8883
 # certificate file paths
 bridge_cafile /etc/ems/certs/ca.crt
 bridge_certfile /etc/ems/certs/client.crt
@@ -66,7 +66,7 @@ def nginx_config_file(conf_file):
     nginx_config_content="""
 server {
 listen 443 ssl;
-server_name device.ems.local;
+server_name device.mqtt.local;
 proxy_ssl_server_name on;
 ssl_certificate    /etc/ems/certs/client.crt;  ## Use your own trusted certificate from CA/SSLTrust
 ssl_certificate_key /etc/ems/certs/client.key; ## Use your own trusted certificate from CA/SSLTrust
