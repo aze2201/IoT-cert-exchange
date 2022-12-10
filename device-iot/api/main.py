@@ -17,7 +17,7 @@ privkey = join(path, privkey)
 
 BUF_SIZE = 65536 
 
-nginx_conf="/etc/ems/nginx_config/ems.conf"
+nginx_conf="/etc/ems/nginx_config/device_domain.conf"
 mosquitto_conf="/etc/ems/mqtt_config/mosquitto.conf"
 
 
